@@ -48,7 +48,7 @@ Define system globals
 	# localectl set-keymap sv-latin1
 	# timedatectl set-timezone Europe/Stockholm
 
-Reboot and relogin with <username>
+Reboot and relogin with the above username
 
 	# shutdown -r now
 
@@ -98,7 +98,7 @@ Now, connect and disconnect using:
 	$ sudo ./sakis3g connect
 	$ sudo ./sakis3g disconnect
 
-To use the executable script locally, move it:
+To use the executable script globally, move it:
 
 	$ sudo mv ./sakis3g /usr/bin/
 
