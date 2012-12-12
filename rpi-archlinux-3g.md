@@ -89,7 +89,6 @@ Add some more configurations (read about it on wiki.sakis3g.org)
 
 	--console
 	--googledns
-	--nostorage
 	--pppd
 	--sudo
 
