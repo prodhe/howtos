@@ -101,53 +101,35 @@ To use the executable script globally, move it:
 
 	$ sudo mv ./sakis3g /usr/bin/
 
-To enable connection at startup, add the following to */etc/rc.local*
 
-	/usr/bin/sakis3g connect
-
-And for a clean exit, add to */etc/rc.local.shutdown*:
-
-	/usr/bin/sakis3g disconnect
-
-
-Make eth0 static
-----------------
+Handle network cable
+--------------------
 
 Disable dhcpcd on eth0 interface at startup
 
 	$ sudo systemctl disable dhcpcd@eth0
 
-Create the following file: */etc/conf.d/network*
+Install netcfg and ifplugd (required for net-auto-wired)
 
-	interface=eth0
-	address=192.168.0.42
-	netmask=24
-	broadcast=192.168.0.255
-	gateway=192.168.0.1
+	$ sudo pacman -S netcfg ifplugd
 
-Create the following file: */etc/systemd/system/network.service*
+All network profiles are stored in */etc/network.d/*.
 
-	[Unit]
-	Description=Network Connectivity
-	Wants=network.target
-	Before=network.target
-	
-	[Service]
-	Type=oneshot
-	RemainAfterExit=yes
-	EnvironmentFile=/etc/conf.d/network
-	ExecStart=/sbin/ip link set dev ${interface} up
-	ExecStart=/sbin/ip addr add ${address}/${netmask} broadcast ${broadcast} dev ${interface}
-	ExecStart=/sbin/ip route add default via ${gateway}
-	ExecStop=/sbin/ip addr flush dev ${interface}
-	ExecStop=/sbin/ip link set dev ${interface} down
-	
-	[Install]
-	WantedBy=multi-user.target
+Copy the standard wired examples (ethernet-dhcp and ethernet-static) and change as you wish:
 
-Make it autostart as a static backup, in case the modem fails:
+	$ cd /etc/network.d
+	$ sudo cp examples/ethernet-static mystaticnet
+	$ sudo cp examples/ethernet-dhcp mydhcpnet
 
-	$ sudo systemctl enable network
+Activate the profiles in */etc/conf.d/netcfg*
+
+	NETWORKS=(mydhcpnet mystaticnet)
+
+Activate the service
+
+	$ sudo systemctl enable net-auto-wired
+
+The net-auto-wired will act if you plug the cable in, and will always start with the DHCP
 
 
 Bind the 3g-given IP to DNS
@@ -159,7 +141,7 @@ Install the client
 
 	$ sudo pacman -S noip
 
-Configure the client (and answer no for the question of running something at successful update)
+Configure the client, bind to PPP and answer no for the question of running something at successful update
 
 	$ sudo noip2 -C -Y
 
@@ -170,9 +152,28 @@ Add to startup
 	$ sudo systemctl enable noip2
 
 
+Autoconnect the 3G modem on startup
+-----------------------------------
+
+To enable connection at startup, create the following file */etc/systemd/system/sakis3g.service*
+
+	[Unit]
+	Description=Sakis3G
+	
+	[Service]
+	ExecStart=/usr/bin/sakis3g connect
+	ExecStop=/usr/bin/sakis3g disconnect
+	
+	[Install]
+	WantedBy=multi-user.target
+
+Enable the autostart:
+
+	$ sudo systemctl enable sakis3g
+
+
 ---
 
 *Written by Prodhe*
-
 
 
