@@ -159,6 +159,7 @@ To enable connection at startup, create the following file */etc/systemd/system/
 
 	[Unit]
 	Description=Sakis3G
+	Before=noip2.service
 	
 	[Service]
 	ExecStart=/usr/bin/sakis3g connect
