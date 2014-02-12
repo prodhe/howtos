@@ -97,6 +97,6 @@ Aktivera vid start och starta om
     systemctl --system enable lighttpd
     reboot
 
-Surfa till http://<rpi-IP>/ och se om det fungerar!
+Surfa till http://rpi-IP/ och se om det fungerar!
 
 ---
