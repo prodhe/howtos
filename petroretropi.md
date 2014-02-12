@@ -7,9 +7,9 @@ Installera
 - Ladda hem raspbian
 
 - Kopiera till SD-kort med:
-    > diskutil list
-    > diskutil unmountDisk /dev/diskN
-    > sudo dd bs=8m if=raspbian.img of=/dev/diskN
+    ```diskutil list
+    diskutil unmountDisk /dev/diskN
+    sudo dd bs=8m if=raspbian.img of=/dev/diskN```
 
 - Starta rpi
 
