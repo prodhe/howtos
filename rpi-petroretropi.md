@@ -62,8 +62,6 @@ Grundkonfa mot emulatorn
     sudo cat player1.cfg >> ~/RetroPie/configs/all/retroarch.cfg
 
 
----
-
 Uppdatera med spel (ROMs)
 -------------------------
 
@@ -75,7 +73,6 @@ Kan göras antingen via SAMBA shares eller över SSH med "scp", till exempel:
 
     scp *.nes pi@aaa.bbb.ccc.ddd:/home/pi/RetroPie/roms/nes
 
----
 
 Lägg till box art
 -----------------
