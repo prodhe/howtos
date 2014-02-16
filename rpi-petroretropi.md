@@ -4,60 +4,62 @@ PetroRetroPi
 Installera
 ----------
 
-- Ladda hem raspbian
+Ladda hem raspbian
 
-- Kopiera till SD-kort med:
+Kopiera till SD-kort med (på mac, men "dd"-kommandot är samma för linux):
 
-        diskutil list
-        diskutil unmountDisk /dev/diskN
-        sudo dd bs=8m if=raspbian.img of=/dev/diskN
+    diskutil list
+    diskutil unmountDisk /dev/diskN
+    sudo dd bs=8m if=raspbian.img of=/dev/diskN
 
-- Starta rpi
+Starta rpi
 
-- Uppdatera systemet (och expandera till fulla minneskortet)
+Uppdatera systemet (och expandera till fulla minneskortet)
 
-        sudo raspi-config
-        sudo rpi-update
-        sudo apt-get update
-        sudo apt-get dist-upgrade
+    sudo raspi-config
+    sudo rpi-update
+    sudo apt-get update
+    sudo apt-get dist-upgrade
 
-- Ladda hem RetroPie-skriptet (via git) och kör
+Ladda hem RetroPie-skriptet (via git) och kör
 
-        sudo apt-get install -y git dialog
-        cd
-        git clone git://github.com/petrockblog/RetroPie-Setup.git
-        cd RetroPie-Setup
-        chmod +x retropie_setup.sh
-        sudo ./retropie_setup.sh
+    sudo apt-get install -y git dialog
+    cd
+    git clone git://github.com/petrockblog/RetroPie-Setup.git
+    cd RetroPie-Setup
+    chmod +x retropie_setup.sh
+    sudo ./retropie_setup.sh
 
-- Fixa skärmen (TVn) med följande i /boot/config.txt (ställ mot 480p VGA)
+Fixa skärmen (TVn) med följande i /boot/config.txt (ställ mot 480p VGA) (inte nödvändigt om det inte är ett problem)
 
-        hdmi_group=1
-        hdmi_mode=1
-        overscan_scale=1
+    hdmi_group=1
+    hdmi_mode=1
+    overscan_scale=1
 
-- Om ljudet är kasst, överklocka efter behag
+Om ljudet är kasst, överklocka efter behag (antingen manuellt i /boot/config.txt, eller via raspi-config)
 
-- Fixa Xbox360-kontrollern
+	sudo raspi-config
 
-        sudo apt-get install xboxdrv
+Installera Xbox360-kontrollern
 
-- Ladda in en instans (en kontroll) vid uppstart via /etc/rc.local:
+    sudo apt-get install xboxdrv
 
-        xboxdrv --trigger-as-button --wid 0 --led 2 --deadzone 4000 --silent &
-        sleep 1
+Ladda in en instans (en kontroll) vid uppstart via /etc/rc.local:
 
-- Kontrollerna MÅSTE vara igång innan rpi:n startar
+    xboxdrv --trigger-as-button --wid 0 --led 2 --deadzone 4000 --silent &
+    sleep 1
 
-- Om den är buggig, testa trixa med USB-porten i /boot/cmdline.txt
+Kontrollerna MÅSTE vara igång innan rpi:n startar
 
-        dwc_otg.speed=1
+Om den är buggig, testa trixa med USB-porten i /boot/cmdline.txt
 
-- Grundkonfa mot emulatorn
+    dwc_otg.speed=1
 
-        cd ~/RetroPie/emulators/RetroArch/installdir/bin/
-        ./retroarch-joyconfig -o player1.cfg -p 1 -j 0
-        sudo cat player1.cfg >> ~/RetroPie/configs/all/retroarch.cfg
+Grundkonfa mot emulatorn
+
+    cd ~/RetroPie/emulators/RetroArch/installdir/bin/
+    ./retroarch-joyconfig -o player1.cfg -p 1 -j 0
+    sudo cat player1.cfg >> ~/RetroPie/configs/all/retroarch.cfg
 
 
 ---
@@ -65,30 +67,34 @@ Installera
 Uppdatera med spel (ROMs)
 -------------------------
 
-- Kopiera filerna till:
+Kopiera filerna till:
 
-        /home/pi/RetroPie/roms
+    /home/pi/RetroPie/roms
 
-- Kan göras antingen via SAMBA shares eller över SSH med "scp"
+Kan göras antingen via SAMBA shares eller över SSH med "scp", till exempel:
+
+    scp *.nes pi@aaa.bbb.ccc.ddd:/home/pi/RetroPie/roms/nes
 
 ---
 
 Lägg till box art
 -----------------
 
-- Ladda hem ES-scraper
+Gör att interfacet blir lite långsammare, men ser snyggare ut med bild och beskrivning...
 
-        cd RetroPie/supplementary
-        git clone http://github.com/elpendor/ES-scraper
+Ladda hem ES-scraper
 
-- Editera scraper.py ("PIL" fungerar inte, men "Image" gör)
+    cd RetroPie/supplementary
+    git clone http://github.com/elpendor/ES-scraper
 
-        vim scraper.py
-        Ändra "import os, imghdr, urllib, urllib2, sys, PIL, argparse, zlib"...
-        till: "import os, imghdr, urllib, urllib2, sys, Image, argparse, zlib"...
+Editera scraper.py ("PIL" fungerar inte, men "Image" gör)
 
-- Kör skriptet via RetroPie-Setup ("SETUP" och sen "ES-Scraper")
+    vim scraper.py
+    Ändra "import os, imghdr, urllib, urllib2, sys, PIL, argparse, zlib"...
+    till: "import os, imghdr, urllib, urllib2, sys, Image, argparse, zlib"...
 
-        cd
-        cd RetroPie-Setup
-        sudo ./retropie_setup.sh
+Kör skriptet via RetroPie-Setup ("SETUP" och sen "ES-Scraper")
+
+    cd
+    cd RetroPie-Setup
+    sudo ./retropie_setup.sh

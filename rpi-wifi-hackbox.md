@@ -72,6 +72,7 @@ Installera lighttpd och php
 
 Lägg till följande i /etc/lighttpd/lighttpd.conf
 
+    # PHP
     server.modules += ("mod_fastcgi")
     index-file.names += ("index.php")
     fastcgi.server = ( 
@@ -88,9 +89,15 @@ Lägg till följande i /etc/lighttpd/lighttpd.conf
         )   
     )
 
+Länka om http-katalogen till /home-partitionen
+
+    mkdir /home/http
+    rmdir /srv/http
+    ln -s /home/http /srv/http
+
 Skapa en teststida
 
-    echo "<?php phpinfo(); ?>" >> /srv/http/index.php
+    echo "<?php phpinfo(); ?>" > /srv/http/index.php
 
 Aktivera vid start och starta om
 
